@@ -1,25 +1,245 @@
+<!DOCTYPE html>
 <html>
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<!-- Start of z3nladgie2 Zendesk Widget script -->
-<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=6e318fa6-81d2-4d82-b049-0ebc1b3a5d2b"> </script>
-<!-- End of z3nladgie2 Zendesk Widget script -->
-
-<script>
-  zE('messenger:set', 'locale', 'fr-FR')
-</script>
-
-
-
+  <meta charset="utf-8">
+  <!-- Required CSS modules -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
+  <link href="https://use.fontawesome.com/releases/v5.13.0/css/all.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.3.8/dist/vuetify.min.css" rel="stylesheet" />
+  <link href="./app.css" rel="stylesheet" />
 </head>
 <body>
-<h1>Hello world</h1>
+  <v-app id="app" v-cloak>
+    <v-card v-if="!loading" flat class="app-container pa-1">
 
-Testing a widget...
+      <!-- Current tab -->
+      <v-card class="text-center my-2 pa-2" color="grey lighten-3" flat>
+        <span class="primary--text font-weight-bold">{{ tabs[currentTab].name }}</span>
+      </v-card>
 
-<iframe width="250" height="50" style="border: 0" src="https://cdn.smooch.io/message-us/index.html?channel=whatsapp&color=green&size=standard&radius=4px&label=Message us on WhatsApp&number=19093459610"></iframe>
+      <!-- User info tab - Start -->
+      <template v-if="currentTab === 'user'">
+        <v-simple-table dense>
+          <template v-slot:default>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>PNR</strong>
+                </td>
+                <td>
+                  KCZD6E
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Category</strong>
+                </td>
+                <td>
+                  Corporate
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Departure date</strong>
+                </td>
+                <td>
+                  2024-10-17
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>PAX</strong>
+                </td>
+                <td>
+                  3
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Flights</strong>
+                </td>
+                <td>
+                  Yes
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Hotel</strong>
+                </td>
+                <td>
+                  Yes
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Train</strong>
+                </td>
+                <td>
+                  No
+                </td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+        <v-btn color="blue-grey darken-2" dark depressed width="100%" @click="openModal('KCZD6E')">
+          View details
+        </v-btn>
 
+      </template>
+      <!-- User info tab - End -->
 
+      <!-- Orders tab - Start -->
+      <template v-if="currentTab === 'orders'">
+<!--
+        <v-btn class="mt-2" color="blue-grey darken-2" dark depressed width="100%" @click="openModal('12345')">
+          Record claim
+        </v-btn>
+
+        <v-text-field
+          v-model="search"
+          prepend-inner-icon="fa-search"
+          label="Search by date or order ID..."
+          dense
+          solo
+          flat
+          outlined
+          hide-details
+        ></v-text-field>
+
+        <div class="my-2">
+          <v-row no-gutters>
+            <v-col
+              v-for="(item, index) in [{ name: 'date', value: 'Date' }, { name: 'id', value: 'Order ID' }]"
+              :key="index"
+              cols="6"
+              :class="index === 0 ? 'pr-1' : 'pl-1'"
+            >
+              <v-btn
+                width="100%"
+                :color="sortBy === item.name ? 'grey darken-2' : 'grey'"
+                outlined
+                :disabled="!getOrders.length"
+                @click="sortBy = item.name; sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'"
+              >
+                Sort by {{ item.value }}
+                <v-icon v-if="sortBy === item.name" class="ml-2" size="10">
+                  {{ sortOrder === 'asc' ? 'fa-chevron-down' : 'fa-chevron-up' }}
+                </v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </div>
+-->
+        <v-expansion-panels v-model="orderTab" v-if="getOrders.length" class="mt-2" accordion flat>
+          <v-expansion-panel v-for="(order, bIndex) in getOrders" :key="bIndex" hide-actions>
+            <v-expansion-panel-header expand-icon="fa-chevron-down">
+              <v-card flat>
+                <strong class="text-uppercase">
+                  #{{ order.id }}
+                </strong>
+                <v-chip :color="status[order.status].color" class="ml-0 ml-1 order-status" label small>
+                  {{ status[order.status].name }}
+                </v-chip>
+                <p class="panel-subtitle grey--text mb-0">
+                  {{order.title}} - {{ new Date(order.date).toDateString() }}
+                </p>
+              </v-card>
+            </v-expansion-panel-header>
+
+            <v-expansion-panel-content>
+              <v-divider></v-divider>
+              <v-card-text class="pa-0">
+                <ul class="panel-items">
+                  <li v-for="(detail, dIndex) in order.details" :key="dIndex">
+                    <strong class="grey--text">{{ detail.name }}</strong><br />{{ detail.value }}
+                  </li>
+                </ul>
+                <v-btn color="blue-grey darken-2" dark depressed width="100%" @click="openModal(order.id)">
+                  View details
+                </v-btn>
+              </v-card-text>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+
+        <div v-else class="no-results text-center mt-5">
+          <img src="img/start.svg" />
+        </div>
+      </template>
+      <!-- Orders tab - End -->
+
+      <!-- Loyalty tab - Start -->
+      <template v-if="currentTab === 'loyalty'">
+        <v-simple-table dense>
+          <template v-slot:default>
+            <tbody>
+              <tr>
+                <td>
+                  <v-icon class="mr-2" color="pink darken-4"></v-icon>
+                  <strong>Claim ID</strong>
+                </td>
+                <td>5673454130</td>
+              </tr>
+              <tr>
+                <td>
+                  <v-icon class="mr-2" color="pink darken-4"></v-icon>
+                  <strong>Policy ID</strong>
+                </td>
+                <td>543-81346</td>
+              </tr>
+              <tr>
+                <td>
+                  <v-icon class="mr-2" color="pink darken-4"></v-icon>
+                  <strong>Claim Date</strong>
+                </td>
+                <td>12/01/2022</td>
+              </tr>
+              <tr>
+                <td>
+                  <v-icon class="mr-2" color="pink darken-4"></v-icon>
+                  <strong>Claim Status</strong>
+                </td>
+                <td>Validating</td>
+              </tr>
+              <tr>
+                <td>
+                  <v-icon class="mr-2" color="pink darken-4"></v-icon>
+                  <strong>Next step</strong>
+                </td>
+                <td>Settlement issue</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+      </template>
+      <!-- Loyalty tab - End -->
+
+      <!-- Basket tab - Start -->
+      <template v-if="currentTab === 'basket'">
+        <v-simple-table dense>
+          <template v-slot:default>
+            <tbody>
+              <tr v-for="(item, key) in loyalty.details" :key="`detail-${key}`">
+                <td>
+                  <v-icon class="mr-2" color="primary">{{ item.icon }}</v-icon>
+                  <strong>{{ item.title }}</strong>
+                </td>
+                <td>{{ item.value }}</td>
+              </tr>
+            </tbody>
+          </template>
+        </v-simple-table>
+    </template>
+      <!-- Basket tab - End -->
+
+    </v-card>
+  </v-app>
+
+  <!-- Required JS modules -->
+  <script src="https://static.zdassets.com/zendesk_app_framework_sdk/2.0/zaf_sdk.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.3.8/dist/vuetify.min.js"></script>
+  <script src="./main.js"></script>
+  <script src="./app.js"></script>
 </body>
 </html>

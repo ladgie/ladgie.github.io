@@ -1,0 +1,108 @@
+[v-cloak] {
+  display: none;
+}
+
+#app * {
+  font-size: 13px;
+}
+
+#app p {
+  margin: 10px 0;
+}
+
+#app h2,
+#app h2 * {
+  font-size: 15px;
+}
+
+#app .v-input input,
+#app .v-input .v-label,
+#app .v-input .v-select__selections,
+#app .v-input .v-icon {
+  font-size: 13px;
+}
+
+#app .v-btn__content {
+  text-transform: none;
+  font-size: 12px;
+  letter-spacing: normal;
+}
+
+#app .v-btn__content i {
+  font-size: 15px;
+}
+
+#app .v-expansion-panel-header .panel-title {
+  color: #ddd;
+}
+
+#app .v-expansion-panel-header .panel-subtitle {
+  font-size: 14px;
+}
+
+#app .panel-items {
+  list-style-type: none;
+  padding: 0;
+}
+
+#app .panel-items li {
+  margin: 10px 0;
+}
+
+#app .v-expansion-panel-header__icon i {
+  font-size: 12px;
+}
+
+#app .v-expansion-panel-header,
+#app .v-expansion-panel-content__wrap {
+  padding: 15px;
+}
+
+#app .v-expansion-panels--flat {
+  border: 1px #e0e0e0 solid;
+}
+
+#app .v-expansion-panels--flat .v-expansion-panel:not(:first-child) {
+  border-top: 1px #e0e0e0 solid;
+}
+
+#app .brand--bg {
+  background-color: #03363d;
+}
+
+#app .brand--text {
+  color: #03363d;
+}
+
+#app .user-info--title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+#app .user-info--subtitle {
+  font-size: 14px;
+}
+
+#app .no-results img {
+  height: 110px;
+}
+
+#app .requester-avatar {
+  background-color: #fff;
+  border: 2px #fff solid;
+}
+
+#app .order-status span {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+#app .v-data-table {
+  border: 1px #ddd solid;
+}
+
+#app .v-data-table th {
+  background-color: #eaeaea;
+}
